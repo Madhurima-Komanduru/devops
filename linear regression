@@ -1,0 +1,52 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def estimate_coeff(p, q):
+    # Number of observations
+    n = np.size(p)
+
+    # Mean of p and q
+    mean_p = np.mean(p)
+    mean_q = np.mean(q)
+
+    # Cross-deviation and deviation about p
+    ss_pq = np.sum(q * p) - n * mean_q * mean_p
+    ss_pp = np.sum(p * p) - n * mean_p * mean_p
+
+    # Regression coefficients
+    b1 = ss_pq / ss_pp
+    b0 = mean_q - b1 * mean_p
+
+    return b0, b1
+
+def plot_regression_line(p, q, b):
+    # Scatter plot of the actual data points
+    plt.scatter(p, q, color="magenta", marker="o", s=30)
+
+    # Predicted response vector
+    q_pred = b[0] + b[1] * p
+
+    # Plotting the regression line
+    plt.plot(p, q_pred, color="green")
+
+    # Labels
+    plt.xlabel('p')
+    plt.ylabel('q')
+
+    # Show plot
+    plt.show()
+
+def main():
+    # Data points
+    p = np.array([10, 11, 12, 13, 14, 15, 16, 17, 18, 19])
+    q = np.array([11, 13, 12, 15, 17, 18, 18, 19, 20, 22])
+
+    # Estimating coefficients
+    b = estimate_coeff(p, q)
+    print('Estimated coefficients are:\nb0 = {:.2f}\nb1 = {:.2f}'.format(b[0], b[1]))
+
+    # Plotting regression line
+    plot_regression_line(p, q, b)
+
+if __name__ == "__main__":
+    main()
