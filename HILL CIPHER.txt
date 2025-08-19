@@ -1,0 +1,122 @@
+HILL CIPHER
+
+import java.io.*;
+import java.util.*;
+//import java.io.*; 
+public class HillCipher
+{
+static float[][] de = new float[3][1];
+static float[][] en = new float[3][1];
+static float[][] a = new float[3][3];
+static float[][] b = new float[3][3];
+static float[][] msg = new float[3][1];
+static float[][] m = new float[3][3];
+static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+static Scanner sc = new Scanner(System.in);
+public static void main(String[] args) throws IOException
+{
+getkeymes();
+encrypt();
+decrypt();
+}
+public static void getkeymes() throws IOException 
+{
+int i,j;
+System.out.println("Enter 3*3matrix for key(Itshouldbeinversible):");
+for(i=0;i<3;i++)
+for(j=0;j<3;j++)
+{
+   a[i][j] = sc.nextFloat();
+  m[i][j] = a[i][j];
+}
+System.out.println("\n Enter a 3 letter string: ");
+String mes = br.readLine();
+for(i=0;i<3;i++)
+  msg[i][0]= mes.charAt(i)-97;
+}
+public static void encrypt() {
+  int i,j,k;
+   for(i=0; i<3;i++)
+   for(j=0;j<1;j++)
+for(k=0;k<3;k++)
+en[i][j] = en[i][j] + a[i][k] * msg[k][j];
+System.out.print("\n Encrypted string is: ");
+for(i=0;i<3;i++)
+   System.out.print((char)((en[i][0]%26)+97));
+}
+public static void inverse(){
+int i,j,k;
+float p,q;
+for(i=0;i<3;i++)
+for(j=0;j<3;j++)
+{
+if(i==j)
+b[i][j]= 1;
+else 
+ b[i][j]=0;
+}
+for(k=0;k<3;k++)
+{
+for(i=0;i<3;i++)
+{
+p=m[i][k];
+q=m[k][k];
+for(j=0;j<3;j++)
+{
+if(i!=k)
+{
+m[i][j] = m[i][j]*q-p*m[k][j];
+b[i][j] = b[i][j]*q-p*b[k][j];
+}
+}
+}
+}
+for(i=0;i<3;i++)
+for(j=0;j<3;j++)
+b[i][j] = b[i][j]/m[i][i];
+System.out.println("\nInverse Matrix is: ");
+for(i=0;i<3;i++)
+{
+for(j=0;j<3;j++)
+System.out.print(b[i][j]+" ");
+System.out.print("\n");
+}
+}
+public static void decrypt()
+{
+int i,j,k;
+inverse();
+ for(i=0;i<3;i++)
+ for(j=0;j<1;j++)
+ for(k=0;k<3;k++)
+ de[i][j] = de[i][j] + b[i][k] * en[k][j];
+ System.out.print("\nDecrypted string is : ");
+ for(i=0;i<3;i++)
+   System.out.print((char)((de[i][0]%26)+97));
+ System.out.print("\n");
+}
+}
+
+/*
+Output:
+Enter 3*3 matrix for key(Itshouldbeinversible):
+1
+2
+3
+6
+5
+3
+2
+1
+3
+Enter a 3 letter string:
+hai
+Encrypted string is:fom
+Inverse Matrix is:
+-0.5   0.125   0.375
+0.5    0.125   -0.625
+0.1666 -0.125   0.29166
+Decrypted string is:hai
+*/
+
+
